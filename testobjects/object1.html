@@ -6,6 +6,7 @@
   <title>jQuery UI Accordion - Collapse content</title>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
@@ -55,6 +56,74 @@
     <h3>JSON</h3>
   <div>
     <p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+    <pre class="prettyprint lang-c">
+    lwm2m_object_t * get_object_wireless() // *** MODIFY ***
+{
+    lwm2m_object_t * objNetIf;
+    char ifname[100];
+    char *linePtr = NULL;
+    FILE *fp;
+    ssize_t read;
+    ssize_t len;
+    uint16_t icount = 0;
+
+    objNetIf = (lwm2m_object_t *)malloc(sizeof(lwm2m_object_t));
+
+    if (NULL != objNetIf)
+      {
+        int i;
+        prv_instance_t * targetP;
+
+        memset(objNetIf, 0, sizeof(lwm2m_object_t));
+
+        objNetIf->objID = 1025; // *** MODIFY: the object ID ***
+
+	// Scan for interfaces currently configured
+	systemCmd("uci show wireless | grep ]=wifi-iface > output.txt");
+	fp = fopen("output.txt","r");
+	if (fp != NULL) {
+	  do {
+	    read = getline(&linePtr, &len, fp);
+	    if (read > 0) {
+	      char* pos = linePtr;
+	      
+	      // Advance pointer until dot or end of read data
+	      while (*pos != '@' && pos <= linePtr+read) pos++;
+
+	      if (*pos == '@') { // Was dot found?
+		pos++; // Advance pointer over @
+
+		// Advance pointer until equal sign or end of read data
+		// copy characters while seeking equal sign
+		int i = 0;
+		while (*pos != '=' && pos <= linePtr+read) {
+		  ifname[i] = *pos;
+		  i++;
+		  pos++;
+		}
+		ifname[i] = '\0'; // Terminate string
+
+		// Check if we found equal sign, if so, we have ifname
+		if (*pos == '=') {
+		  printf("Found wireless interface: >%s<, creating object instance %i\n", ifname, icount);
+		  targetP = (prv_instance_t *)malloc(sizeof(prv_instance_t));
+		  if (NULL == targetP) return NULL;
+		  memset(targetP, 0, sizeof(prv_instance_t));
+		  targetP->shortID = icount;
+		  icount++;
+		  char *tempPtr = malloc(strlen(ifname)+1);
+		  strcpy(tempPtr, ifname);
+		  targetP->ifname = tempPtr;
+		  objNetIf->instanceList = LWM2M_LIST_ADD(objNetIf->instanceList, targetP);
+		}	       
+	      }
+	    }
+	    free(linePtr);
+	    linePtr = NULL;
+	  } while (read > 0);
+	}
+
+    </pre>
   </div>
 
   </div>
