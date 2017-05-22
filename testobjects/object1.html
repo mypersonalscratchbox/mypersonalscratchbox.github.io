@@ -49,13 +49,6 @@
       <li>List item two</li>
       <li>List item three</li>
     </ul>
-
-  </div>
-  </div>
-
-    <h3>JSON</h3>
-  <div>
-    <p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
     <pre class="prettyprint lang-c">
     lwm2m_object_t * get_object_wireless() // *** MODIFY ***
 {
@@ -124,7 +117,109 @@
 	}
 
     </pre>
+
   </div>
+  </div>
+
+    <h3>JSON</h3>
+  <div>
+    <p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
+    <pre class="prettyprint">
+{
+  "LWM2M": {
+    "-xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+    "-xsi:noNamespaceSchemaLocation": "http://openmobilealliance.org/tech/profiles/LWM2M.xsd",
+    "Object": {
+      "-ObjectType": "MODefinition",
+      "Name": "Digital Input",
+      "Description1": "Generic digital input for non-specific sensors",
+      "ObjectID": "3200",
+      "ObjectURN": "urn:oma:lwm2m:ext:3200",
+      "MultipleInstances": "Multiple",
+      "Mandatory": "Optional",
+      "Resources": {
+        "Item": [
+          {
+            "-ID": "5500",
+            "Name": "Digital Input State",
+            "Operations": "R",
+            "MultipleInstances": "Single",
+            "Mandatory": "Mandatory",
+            "Type": "Boolean",
+            "Description": "The current state of a digital input."
+          },
+          {
+            "-ID": "5501",
+            "Name": "Digital Input Counter",
+            "Operations": "R",
+            "MultipleInstances": "Single",
+            "Mandatory": "Optional",
+            "Type": "Integer",
+            "Description": "The cumulative value of active state detected."
+          },
+          {
+            "-ID": "5502",
+            "Name": "Digital Input Polarity",
+            "Operations": "RW",
+            "MultipleInstances": "Single",
+            "Mandatory": "Optional",
+            "Type": "Boolean",
+            "Description": "The polarity of the digital input as a Boolean (0 = Normal, 1= Reversed)"
+          },
+          {
+            "-ID": "5503",
+            "Name": "Digital Input Debounce",
+            "Operations": "RW",
+            "MultipleInstances": "Single",
+            "Mandatory": "Optional",
+            "Type": "Integer",
+            "Units": "ms",
+            "Description": "The debounce period in ms. ."
+          },
+          {
+            "-ID": "5504",
+            "Name": "Digital Input Edge Selection",
+            "Operations": "RW",
+            "MultipleInstances": "Single",
+            "Mandatory": "Optional",
+            "Type": "Integer",
+            "RangeEnumeration": "1-3",
+            "Description": "The edge selection as an integer (1 = Falling edge, 2 = Rising edge, 3 = Both Rising and Falling edge)."
+          },
+          {
+            "-ID": "5505",
+            "Name": "Digital Input Counter Reset",
+            "Operations": "E",
+            "MultipleInstances": "Single",
+            "Mandatory": "Optional",
+            "Type": "Opaque",
+            "Description": "Reset the Counter value."
+          },
+          {
+            "-ID": "5750",
+            "Name": "Application Type",
+            "Operations": "RW",
+            "MultipleInstances": "Single",
+            "Mandatory": "Optional",
+            "Type": "String",
+            "Description": "The application type of the sensor or actuator as a string, for instance, “Air Pressure”"
+          },
+          {
+            "-ID": "5751",
+            "Name": "Sensor Type",
+            "Operations": "R",
+            "MultipleInstances": "Single",
+            "Mandatory": "Optional",
+            "Type": "String",
+            "Description": "The type of the sensor (for instance PIR type)"
+          }
+        ]
+      }
+    }
+  }
+}
+			  </pre>
+ </div>
 
   </div>
  
